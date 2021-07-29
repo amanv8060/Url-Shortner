@@ -1,0 +1,58 @@
+import * as jwt from "jsonwebtoken";
+import argon2 from "argon2";
+import { Request, Response } from "express";
+import { UserModel } from "../models/userModel";
+import env from "../config";
+import { CallbackError } from "mongoose";
+
+
+const userSignin = async (req: Request, res: Response) => {
+  let user;
+
+  user = await UserModel.findOne({ email: req.body.email });
+
+  if (!user) {
+    return res.status(404).send({ message: "Email Not found." });
+  }
+
+  if (!(await argon2.verify(user.password, req.body.password))) {
+    return res.status(401).send({ message: "Invalid Password" });
+  }
+
+  const token = jwt.sign({ id: user.id }, env.SECRET_KEY, {
+    expiresIn: 604800, // 7 Days (in sec)
+  });
+
+  res.status(200).send({
+    id: user._id,
+    email: user.email,
+    token: token,
+  });
+};
+
+const createUser = async (req: Request, res: Response) => {
+  if (req.body.email === undefined) {
+    return res.status(400).send({ message: "Email is required" });
+  }
+  if (req.body.password === undefined) {
+    return res.status(400).send({ message: "Password is required" });
+  }
+  const hash = await argon2.hash(req.body.password, {
+    type: argon2.argon2id,
+  });
+
+  const user = new UserModel({
+    email: req.body.email,
+    password: hash,
+  });
+
+  user.save((err: CallbackError, user: any) => {
+    if (err) {
+      return res.status(500).send({ message: err.message });
+    } else {
+      return res.status(200).send({ message: "User Registered Successfully" });
+    }
+  });
+};
+
+export default { userSignin, createUser };
