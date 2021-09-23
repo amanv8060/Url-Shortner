@@ -10,7 +10,6 @@ import 'package:urlshortnerclient/services/baseService.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
 import 'package:urlshortnerclient/utils/scalingQuery.dart';
 import 'package:urlshortnerclient/viewModels/urlViewModel.dart';
-import 'package:urlshortnerclient/views/homeScreen.dart';
 import 'package:urlshortnerclient/views/urls/allUrlsView.dart';
 
 class CreateUrlScreen extends StatefulWidget {

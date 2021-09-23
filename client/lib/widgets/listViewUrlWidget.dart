@@ -3,9 +3,9 @@ Copyright 2021 Aman Verma. All rights reserved.
 Use of this source code is governed by a MIT license that can be
 found in the LICENSE file.
 */
-
 import 'package:flutter/material.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
+import 'package:urlshortnerclient/views/urls/editUrlView.dart';
 import 'package:urlshortnerclient/views/urls/singleUrlScreen.dart';
 
 class ListViewUrlWidget extends StatelessWidget {
@@ -33,7 +33,7 @@ class ListViewUrlWidget extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => SingleUrlScreen(full: full, url: url)));
+                builder: (context) => EditUrlScreen(urlModel: url)));
       },
     );
   }

@@ -70,6 +70,12 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> logout() async {
+    final _instance = await SharedPreferences.getInstance();
+    await _instance.remove("user");
+    return;
+  }
+
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty)
       return "Please Enter password";

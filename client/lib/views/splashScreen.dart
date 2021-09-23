@@ -5,6 +5,7 @@ found in the LICENSE file.
 */
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key}) : super(key: key);
@@ -14,14 +15,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  //TODO: Make Splash Screen
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
-        child: Text("Splash Screen"),
-      ),
+          height: _height,
+          width: _width,
+          child: Center(
+            child: Lottie.asset(
+              'assets/animations/logoAnimated.json',
+            ),
+          )),
     );
   }
 }

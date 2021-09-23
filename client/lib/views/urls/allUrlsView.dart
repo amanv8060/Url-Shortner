@@ -7,7 +7,9 @@ found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
+import 'package:urlshortnerclient/viewModels/authViewModel.dart';
 import 'package:urlshortnerclient/viewModels/urlsViewModel.dart';
+import 'package:urlshortnerclient/views/homeScreen.dart';
 import 'package:urlshortnerclient/views/urls/createUrlView.dart';
 import 'package:urlshortnerclient/widgets/listViewUrlWidget.dart';
 
@@ -20,6 +22,7 @@ class AllUrlsScreen extends StatefulWidget {
 
 class _AllUrlsScreenState extends State<AllUrlsScreen> {
   UrlsViewModel _urlViewModel = serviceLocator<UrlsViewModel>();
+  AuthViewModel _authViewModel = serviceLocator<AuthViewModel>();
 
   @override
   void initState() {
@@ -36,7 +39,25 @@ class _AllUrlsScreenState extends State<AllUrlsScreen> {
           child:
               Consumer<UrlsViewModel>(builder: (context, urlViewModel, child) {
             return Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(
+                title: Text("Url Shortener"),
+                actions: [
+                  TextButton(
+                      onPressed: () async {
+                        await _authViewModel.logout().then((value) => {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                  (route) => false)
+                            });
+                      },
+                      child: Text(
+                        "Log Out  ",
+                        style: TextStyle(color: Colors.white),
+                      ))
+                ],
+              ),
               body: _getWidget(constraints, context, urlViewModel),
               floatingActionButton: FloatingActionButton.extended(
                   onPressed: () {

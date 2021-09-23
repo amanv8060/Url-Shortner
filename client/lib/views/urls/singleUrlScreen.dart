@@ -23,31 +23,62 @@ class _SingleUrlScreenState extends State<SingleUrlScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text("Single URL View"),
         ),
-        body: widget.full
-            ? _singleUrlDesktop(context)
-            : _singleUrlMobile(context));
+        body: _singleUrlMobile(context));
   }
 
-  Widget _singleUrlDesktop(BuildContext context) {
-    return Column(
-      children: [],
-    );
-  }
+  //Todo : Uncomment this when the graph is  ready
+
+  // Widget _singleUrlDesktop(BuildContext context) {
+  //   return Column(
+  //     children: [
+  //       Row(
+  //         children: [
+  //           Text(
+  //             "Long Url : ",
+  //             style: GoogleFonts.lato(
+  //                 fontSize: Theme.of(context).textTheme.headline5!.fontSize),
+  //           ),
+  //           Text(widget.url.longUrl)
+  //         ],
+  //       ),
+  //       Row(
+  //         children: [
+  //           Text("Shortened Url : "),
+  //           Text(BaseService.BASE_URL + "/" + widget.url.shortUrl)
+  //         ],
+  //       ),
+  //       Center(
+  //         child: ElevatedButton(
+  //             onPressed: () {
+  //               Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                       builder: (context) =>
+  //                           EditUrlScreen(urlModel: widget.url)));
+  //             },
+  //             child: Text("Edit/Delete this URL")),
+  //       )
+  //     ],
+  //   );
+  // }
 
   Widget _singleUrlMobile(BuildContext context) {
     return Column(
       children: [
-        ListTile(
-          title: Text("Edit/Delete this URL"),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditUrlScreen(urlModel: widget.url)));
-          },
-        ),
+        Center(
+          child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            EditUrlScreen(urlModel: widget.url)));
+              },
+              child: Text("Edit/Delete this URL")),
+        )
       ],
     );
   }

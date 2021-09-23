@@ -231,13 +231,11 @@ class _EditUrlScreenState extends State<EditUrlScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          setState(() {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AllUrlsScreen()),
-                                (route) => false);
-                          });
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllUrlsScreen()),
+                              (route) => false);
                         },
                         child: Text("Go Back to Home"),
                       ),

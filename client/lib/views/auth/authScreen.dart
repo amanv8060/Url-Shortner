@@ -41,10 +41,10 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             )
           ]),
-          _getView(_height, _width)
+          _getDesktopView(_height, _width)
         ]);
       } else {
-        return _getView(_height, _width, full: false);
+        return _getDesktopView(_height, _width);
       }
     }));
   }
@@ -61,7 +61,10 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
-  Widget _getView(double _height, double _width, {bool full = true}) {
+  Widget _getDesktopView(
+    double _height,
+    double _width,
+  ) {
     return Container(
       height: _height,
       width: _width,
@@ -100,13 +103,49 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
           _signIn
               ? SignInView(
-                  full: full,
+                  full: true,
                 )
               : SignUpView(
-                  full: full,
+                  full: true,
                   onPressed: _update,
                 ),
         ],
+      ),
+    );
+  }
+
+  Widget _getMobileView(double _height, double _width) {
+    return Container(
+      height: _height,
+      width: _width,
+    
+      child: Container(
+        width: _width,
+        decoration: BoxDecoration(
+          color: AppTheme.mediumTurquoise,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+           
+            _signIn
+                ? SignInView(
+                    full:false,
+                  )
+                : SignUpView(
+                    full: false,
+                    onPressed: _update,
+                  ),
+            Center(
+                child: ElevatedButton(
+                    onPressed: _switch,
+                    child: _signIn ? Text("Sign Up") : Text("Sign in")))
+          ],
+        ),
       ),
     );
   }

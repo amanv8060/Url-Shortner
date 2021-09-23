@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "client")
-set(APPLICATION_ID "in.dsckiit.client")
+set(APPLICATION_ID "com.ophilia.urlshortnerclient")
 
 cmake_policy(SET CMP0063 NEW)
 
