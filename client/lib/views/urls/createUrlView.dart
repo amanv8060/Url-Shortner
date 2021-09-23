@@ -68,6 +68,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: _width * 0.05),
       child: Card(
+        elevation: 0,
         child: Form(
           key: _formKey,
           child: Column(

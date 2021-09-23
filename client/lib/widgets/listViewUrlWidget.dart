@@ -42,7 +42,6 @@ class ListViewUrlWidget extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(10),
       child: ListTile(
-        leading: Text(index.toString()),
         title: Text(url.shortUrl),
         subtitle: Text(url.longUrl),
         trailing: Text(url.clicks.toString() + " Clicks"),

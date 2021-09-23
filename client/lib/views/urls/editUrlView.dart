@@ -4,6 +4,7 @@ Use of this source code is governed by a MIT license that can be
 found in the LICENSE file.
 */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
@@ -72,69 +73,75 @@ class _EditUrlScreenState extends State<EditUrlScreen> {
 
   Widget _getForm(double _height, double _width) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: _width * 0.05),
+      padding: kIsWeb
+          ? EdgeInsets.symmetric(horizontal: _width * 0.05)
+          : EdgeInsets.symmetric(horizontal: _width * 0.01),
       child: Card(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Enter the url to shorten"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: _longUrlController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Enter alias"),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    readOnly: true,
-                    controller: _aliasController,
-                    decoration: InputDecoration(
-                        prefixText: BaseService.BASE_URL + "/",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                  )
-                ],
-              ),
-              ElevatedButton(
-                  child: Text("Update"),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Enter the url to shorten"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _longUrlController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Enter alias"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      readOnly: true,
+                      controller: _aliasController,
+                      decoration: InputDecoration(
+                          prefixText: BaseService.BASE_URL + "/",
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    )
+                  ],
+                ),
+                ElevatedButton(
+                    child: Text("Update"),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          _isVisible = 1;
+                          _update = true;
+                        });
+                        _formKey.currentState!.save();
+                        _urlViewModel.editUrl(
+                            _longUrlController.text, widget.urlModel.id!);
+                      }
+                    }),
+                ElevatedButton(
+                    child: Text("Delete"),
+                    onPressed: () async {
                       setState(() {
                         _isVisible = 1;
-                        _update = true;
+                        _update = false;
                       });
-                      _formKey.currentState!.save();
-                      _urlViewModel.editUrl(
-                          _longUrlController.text, widget.urlModel.id!);
-                    }
-                  }),
-              ElevatedButton(
-                  child: Text("Delete"),
-                  onPressed: () async {
-                    setState(() {
-                      _isVisible = 1;
-                      _update = false;
-                    });
-                    _urlViewModel.deleteUrl(widget.urlModel.id!);
-                  })
-            ],
+                      _urlViewModel.deleteUrl(widget.urlModel.id!);
+                    })
+              ],
+            ),
           ),
         ),
       ),
@@ -222,10 +229,13 @@ class _EditUrlScreenState extends State<EditUrlScreen> {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
+                          Navigator.pop(context);
+
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateUrlScreen()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateUrlScreen()),
+                          );
                         },
                         child: Text("Short New"),
                       ),

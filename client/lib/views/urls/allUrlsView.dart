@@ -5,6 +5,7 @@ found in the LICENSE file.
 */
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
 import 'package:urlshortnerclient/viewModels/authViewModel.dart';
@@ -114,8 +115,11 @@ class _AllUrlsScreenState extends State<AllUrlsScreen> {
       return Column(
         children: [
           Center(
-              child: Text(urlViewModel.urls.length.toString() +
-                  " urls shortned so far")),
+              child: Text(
+            urlViewModel.urls.length.toString() + " urls shortned so far",
+            style: GoogleFonts.lato(
+                fontSize: Theme.of(context).textTheme.headline4!.fontSize),
+          )),
           (constraints.maxWidth > 1000)
               ? Expanded(
                   child: GridView.count(

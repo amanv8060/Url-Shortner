@@ -5,7 +5,9 @@ found in the LICENSE file.
 */
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
+import 'package:urlshortnerclient/services/baseService.dart';
 import 'package:urlshortnerclient/views/urls/editUrlView.dart';
 
 class SingleUrlScreen extends StatefulWidget {
@@ -68,6 +70,33 @@ class _SingleUrlScreenState extends State<SingleUrlScreen> {
   Widget _singleUrlMobile(BuildContext context) {
     return Column(
       children: [
+        Card(
+          child: ListTile(
+              title: Text(
+                "Long Url : ",
+                style: GoogleFonts.lato(
+                    fontSize: Theme.of(context).textTheme.headline6!.fontSize),
+              ),
+              subtitle: Text(widget.url.longUrl,
+                  style: GoogleFonts.lato(
+                      fontSize:
+                          Theme.of(context).textTheme.headline6!.fontSize))),
+        ),
+        Card(
+          child: ListTile(
+              title: Text(
+                "Shortened Url : : ",
+                style: GoogleFonts.lato(
+                    fontSize: Theme.of(context).textTheme.headline6!.fontSize),
+              ),
+              subtitle: Text(BaseService.BASE_URL + "/" + widget.url.shortUrl,
+                  style: GoogleFonts.lato(
+                      fontSize:
+                          Theme.of(context).textTheme.headline6!.fontSize))),
+        ),
+        SizedBox(
+          height: 100,
+        ),
         Center(
           child: ElevatedButton(
               onPressed: () {

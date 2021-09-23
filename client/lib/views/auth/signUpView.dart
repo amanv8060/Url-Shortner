@@ -50,7 +50,9 @@ class _SignUpViewState extends State<SignUpView> {
     return ChangeNotifierProvider<AuthViewModel>(
       create: (context) => _authViewModel,
       child: Consumer<AuthViewModel>(builder: (context, model, child) {
-        return _signUpViewDesktop(model, _height, _width);
+        return widget.full
+            ? _signUpViewDesktop(model, _height, _width)
+            : _signUpViewMobile(model, _height, _width);
       }),
     );
   }
@@ -78,148 +80,171 @@ class _SignUpViewState extends State<SignUpView> {
         ]));
   }
 
-  Widget _getForm(AuthViewModel model, double _height, double _width) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-              child: Text(
-            "Create an Account",
-            style: GoogleFonts.lato(
-                fontSize: _height * 0.05, fontWeight: FontWeight.bold),
-          )),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Email",
-                style: GoogleFonts.lato(),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _emailController,
-                validator: model.validateEmail,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ],
+  Widget _signUpViewMobile(AuthViewModel model, double _height, double _width) {
+    return Container(
+        height: _height * 0.75,
+        padding: EdgeInsets.symmetric(
+          horizontal: _width * 0.1,
+        ),
+        width: _width * 0.95,
+        decoration: BoxDecoration(
+          color: AppTheme.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Password",
-                style: GoogleFonts.lato(),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: !_visible,
-                validator: model.validatePassword,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  suffixIcon: IconButton(
-                    icon: _visible
-                        ? Icon(Icons.remove_red_eye)
-                        : Icon(Icons.remove_red_eye_outlined),
-                    color: _visible ? Colors.red : Colors.blue,
-                    onPressed: () {
-                      setState(() {
-                        _visible = !_visible;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Name",
-                style: GoogleFonts.lato(),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _nameController,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please Enter Name";
-                  } else if (value.length < 3) {
-                    "Please Enter Valid Name";
-                  }
-                },
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ],
-          ),
-          Center(
-              child: ElevatedButton(
-                  onPressed: model.processing
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-
-                            await model.signUp(_emailController.text,
-                                _passwordController.text, _nameController.text);
-                            if (model.signUpSuccess) {
-                              widget.onPressed(true);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          "Sign Up success , please Sign In ")));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Error Occurred")));
-                            }
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Please Enter Valid Data")));
-                            // Fluttertoast.showToast(msg: "Please Enter Valid Data");
-                          }
-                        },
-                  child: Text(
-                    "Continue",
-                    style: GoogleFonts.lato(),
-                  ))),
-          _authViewModel.isError
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _authViewModel.errorMessage,
-                      style: GoogleFonts.lato(
-                        color: Colors.red,
-                      ),
-                      softWrap: true,
-                    )
-                  ],
+        ),
+        child: Stack(children: [
+          _getForm(model, _height, _width),
+          model.processing
+              ? Center(
+                  child: CircularProgressIndicator(),
                 )
               : SizedBox()
-        ],
-      ),
+        ]));
+  }
+
+  Widget _getForm(AuthViewModel model, double _height, double _width) {
+    return Form(key: _formKey, child: _getFormElements(model, _height, _width));
+  }
+
+  Widget _getFormElements(AuthViewModel model, double _height, double _width) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+            child: Text(
+          "Create an Account",
+          style: GoogleFonts.lato(
+              fontSize: _height * 0.05, fontWeight: FontWeight.bold),
+        )),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Email",
+              style: GoogleFonts.lato(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _emailController,
+              validator: model.validateEmail,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10))),
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Password",
+              style: GoogleFonts.lato(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: !_visible,
+              validator: model.validatePassword,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                suffixIcon: IconButton(
+                  icon: _visible
+                      ? Icon(Icons.remove_red_eye)
+                      : Icon(Icons.remove_red_eye_outlined),
+                  color: _visible ? Colors.red : Colors.blue,
+                  onPressed: () {
+                    setState(() {
+                      _visible = !_visible;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Name",
+              style: GoogleFonts.lato(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _nameController,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please Enter Name";
+                } else if (value.length < 3) {
+                  "Please Enter Valid Name";
+                }
+              },
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10))),
+            ),
+          ],
+        ),
+        Center(
+            child: ElevatedButton(
+                onPressed: model.processing
+                    ? null
+                    : () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+
+                          await model.signUp(_emailController.text,
+                              _passwordController.text, _nameController.text);
+                          if (model.signUpSuccess) {
+                            widget.onPressed(true);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text("Sign Up success , please Sign In ")));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Error Occurred")));
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Please Enter Valid Data")));
+                          // Fluttertoast.showToast(msg: "Please Enter Valid Data");
+                        }
+                      },
+                child: Text(
+                  "Continue",
+                  style: GoogleFonts.lato(),
+                ))),
+        _authViewModel.isError
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _authViewModel.errorMessage,
+                    style: GoogleFonts.lato(
+                      color: Colors.red,
+                    ),
+                    softWrap: true,
+                  )
+                ],
+              )
+            : SizedBox()
+      ],
     );
   }
 

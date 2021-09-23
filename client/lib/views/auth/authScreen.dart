@@ -44,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
           _getDesktopView(_height, _width)
         ]);
       } else {
-        return _getDesktopView(_height, _width);
+        return _getMobileView(_height, _width);
       }
     }));
   }
@@ -118,7 +118,6 @@ class _AuthScreenState extends State<AuthScreen> {
     return Container(
       height: _height,
       width: _width,
-    
       child: Container(
         width: _width,
         decoration: BoxDecoration(
@@ -131,10 +130,9 @@ class _AuthScreenState extends State<AuthScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-           
             _signIn
                 ? SignInView(
-                    full:false,
+                    full: false,
                   )
                 : SignUpView(
                     full: false,

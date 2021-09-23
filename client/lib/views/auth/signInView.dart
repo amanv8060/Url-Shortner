@@ -48,7 +48,9 @@ class _SignInViewState extends State<SignInView> {
       create: (context) => _authViewModel,
       child: Consumer<AuthViewModel>(
         builder: (context, model, child) {
-          return _signInViewDesktop(model, _height, _width);
+          return widget.full
+              ? _signInViewDesktop(model, _height, _width)
+              : _signInViewMobile(model, _height, _width);
         },
       ),
     );
@@ -70,7 +72,40 @@ class _SignInViewState extends State<SignInView> {
             bottomRight: Radius.circular(20),
           ),
         ),
-        child: _getForm(model, _height, _width));
+        child: Stack(children: [
+          _getForm(model, _height, _width),
+          model.processing
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox()
+        ]));
+  }
+
+  Widget _signInViewMobile(
+    AuthViewModel model,
+    double _height,
+    double _width,
+  ) {
+    return Container(
+        height: _height * 0.75,
+        padding: EdgeInsets.symmetric(
+            horizontal: _width * 0.1, vertical: _height * 0.05),
+        width: _width * 0.95,
+        decoration: BoxDecoration(
+          color: AppTheme.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Stack(children: [
+          _getForm(model, _height, _width),
+          model.processing
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox()
+        ]));
   }
 
   Widget _getForm(AuthViewModel model, double _height, double _width) {
