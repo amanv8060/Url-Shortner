@@ -41,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
             return SplashScreen();
           } else {
             if (model.user != null) {
-              print(model.user!.token); 
               return AllUrlsScreen();
             } else {
               return AuthScreen();

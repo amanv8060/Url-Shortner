@@ -7,7 +7,7 @@ found in the LICENSE file.
 import 'package:http/http.dart' as http;
 
 class BaseService {
-  static const String BASE_URL = "http://127.0.0.1:3000";
+  static const String BASE_URL = "https://url.ophilia.in";
   static final Map<String, String> headers = {
     "Content-Type": "application/json"
   };
