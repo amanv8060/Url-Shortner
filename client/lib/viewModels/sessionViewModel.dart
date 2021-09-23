@@ -51,7 +51,6 @@ class SessionViewModel extends ChangeNotifier {
 
     //Verifying if the token present is actually valid
     if (_sessionAuth.user != null) {
-      print("here");
       final _instance = await SharedPreferences.getInstance();
       bool temp = false;
       try {

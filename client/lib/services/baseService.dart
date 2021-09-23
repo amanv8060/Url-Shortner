@@ -35,7 +35,7 @@ class BaseService {
           return http.put(uri, headers: sentHeaders, body: body);
 
         case 'DELETE':
-          return http.delete(uri, headers: sentHeaders);
+          return http.delete(uri, headers: sentHeaders , body:body);
 
         default:
           return http.post(uri, headers: sentHeaders, body: body);

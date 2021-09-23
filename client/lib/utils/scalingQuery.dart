@@ -38,11 +38,7 @@ class ScalingQuery {
     this._longDimension = width < height ? height : width;
   }
 
-  double fontSize(double size) {
-    var tempLongDimension = (16 / 9) * this._shortDimension;
-    return sqrt(pow(tempLongDimension, 2) + pow(_shortDimension, 2)) *
-        (size / 100);
-  }
+
 
   double scale(double size) {
     return this._shortDimension / this._guidelineBaseWidth * size;

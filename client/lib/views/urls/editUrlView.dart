@@ -6,6 +6,7 @@ found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:urlshortnerclient/models/urlModel.dart';
 import 'package:urlshortnerclient/services/baseService.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
 import 'package:urlshortnerclient/services/urlService.dart';
@@ -13,15 +14,17 @@ import 'package:urlshortnerclient/utils/scalingQuery.dart';
 import 'package:urlshortnerclient/viewModels/sessionViewModel.dart';
 import 'package:urlshortnerclient/viewModels/urlViewModel.dart';
 import 'package:urlshortnerclient/views/homeScreen.dart';
+import 'package:urlshortnerclient/views/urls/createUrlView.dart';
 
-class CreateUrlScreen extends StatefulWidget {
-  CreateUrlScreen({Key? key}) : super(key: key);
+class EditUrlScreen extends StatefulWidget {
+  final UrlModel urlModel;
+  EditUrlScreen({Key? key, required this.urlModel}) : super(key: key);
 
   @override
-  _CreateUrlScreenState createState() => _CreateUrlScreenState();
+  _EditUrlScreenState createState() => _EditUrlScreenState();
 }
 
-class _CreateUrlScreenState extends State<CreateUrlScreen> {
+class _EditUrlScreenState extends State<EditUrlScreen> {
   final UrlViewModel _urlViewModel = serviceLocator<UrlViewModel>();
 
   late TextEditingController _longUrlController;
@@ -31,14 +34,17 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
   late GlobalKey<FormState> _formKey;
 
   late ScalingQuery _scalingQuery;
-  bool _isVisible = false;
+  int _isVisible = 0;
+  bool _update = false;
 
   @override
   void initState() {
     super.initState();
     _formKey = new GlobalKey<FormState>();
-    _longUrlController = new TextEditingController();
-    _aliasController = new TextEditingController();
+    _longUrlController =
+        new TextEditingController(text: widget.urlModel.longUrl);
+    _aliasController =
+        new TextEditingController(text: widget.urlModel.shortUrl);
   }
 
   @override
@@ -51,16 +57,16 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
         create: (context) => _urlViewModel,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Create New Url"),
+            title: Text("Edit Url"),
           ),
-          body: Stack(
+          body: IndexedStack(
+            index: _isVisible,
             children: [
               _getForm(_height, _width),
-              _isVisible
-                  ? Consumer<UrlViewModel>(builder: (context, model, child) {
-                      return _getPopUps(context, model);
-                    })
-                  : SizedBox()
+              Consumer<UrlViewModel>(builder: (context, model, child) {
+                return Container(
+                    color: Colors.blue[100], child: _getPopUps(context, model));
+              })
             ],
           ),
         ));
@@ -99,6 +105,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    readOnly: true,
                     controller: _aliasController,
                     decoration: InputDecoration(
                         prefixText: BaseService.BASE_URL + "/",
@@ -108,16 +115,26 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                 ],
               ),
               ElevatedButton(
-                  child: Text("Short It"),
+                  child: Text("Update"),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       setState(() {
-                        _isVisible = true;
+                        _isVisible = 1;
+                        _update = true;
                       });
                       _formKey.currentState!.save();
-                      _urlViewModel.createUrl(
-                          _longUrlController.text, _aliasController.text);
+                      _urlViewModel.editUrl(
+                          _longUrlController.text, widget.urlModel.id!);
                     }
+                  }),
+              ElevatedButton(
+                  child: Text("Delete"),
+                  onPressed: () async {
+                    setState(() {
+                      _isVisible = 1;
+                      _update = false;
+                    });
+                    _urlViewModel.deleteUrl(widget.urlModel.id!);
                   })
             ],
           ),
@@ -172,7 +189,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                     child: TextButton(
                       onPressed: () {
                         setState(() {
-                          _isVisible = false;
+                          _isVisible = 0;
                         });
                       },
                       child: Text("OKAY"),
@@ -192,7 +209,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Short Url Created",
+                    _update ? "Short Url Edited" : "Short Url Deleted",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize:
@@ -206,17 +223,13 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          setState(() {
-                            _isVisible = false;
-                          });
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateUrlScreen()));
                         },
-                        child: Text("Short New",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headline5!
-                                    .fontSize)),
+                        child: Text("Short New"),
                       ),
                       TextButton(
                         onPressed: () {
@@ -228,13 +241,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                                 (route) => false);
                           });
                         },
-                        child: Text("Go Back to Home",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .headline5!
-                                    .fontSize)),
+                        child: Text("Go Back to Home"),
                       ),
                     ],
                   )

@@ -19,7 +19,7 @@ class UrlModel {
       longUrl: json['longUrl'],
       shortUrl: json['shortUrl'],
       clicks: json['clicks'],
-      id: json['id'],
+      id: json['_id'],
     );
   }
 
@@ -27,7 +27,7 @@ class UrlModel {
         'longUrl': longUrl,
         'shortUrl': shortUrl,
         'clicks': clicks,
-        'id': id,
+        '_id': id,
       };
 
 }

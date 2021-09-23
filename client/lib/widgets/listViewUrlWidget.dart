@@ -6,6 +6,7 @@ found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
+import 'package:urlshortnerclient/views/urls/editUrlView.dart';
 
 class ListViewUrlWidget extends StatelessWidget {
   final UrlModel url;
@@ -24,18 +25,34 @@ class ListViewUrlWidget extends StatelessWidget {
 
   Widget _urlWidgetDesktop(BuildContext context) {
     return ListTile(
-      
       leading: Text(index.toString()),
       title: Text(url.shortUrl),
       subtitle: Text(url.longUrl),
       trailing: Text(url.clicks.toString() + " Clicks"),
-      onTap: (){
-        
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditUrlScreen(urlModel: url)));
       },
     );
   }
 
   Widget _urlWidgetMobile(BuildContext context) {
-    return Container(child: Text("Half"));
+    return Card(
+      margin: const EdgeInsets.all(10),
+      child: ListTile(
+        leading: Text(index.toString()),
+        title: Text(url.shortUrl),
+        subtitle: Text(url.longUrl),
+        trailing: Text(url.clicks.toString() + " Clicks"),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditUrlScreen(urlModel: url)));
+        },
+      ),
+    );
   }
 }
