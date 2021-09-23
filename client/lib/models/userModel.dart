@@ -6,22 +6,32 @@ found in the LICENSE file.
 
 class UserModel {
   String email;
-  String? jwt;
+  String token;
   String name;
 
-  UserModel({required this.email, required this.name, this.jwt});
+  UserModel({required this.email, required this.name, required this.token});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       email: json['email'],
       name: json['name'],
-      jwt: json['jwt'],
+      token: json['token'],
     );
   }
 
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
-        'jwt': jwt,
+        'token': token,
       };
+  @override
+  String toString() {
+    return "${email},${token},${name}";
+  }
+
+ factory UserModel.fromString(String str) {
+    List<String> strs = str.split(',');
+
+    return UserModel(email: strs[0], name: strs[2], token: strs[1]);
+  }
 }

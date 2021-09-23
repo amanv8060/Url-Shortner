@@ -5,8 +5,11 @@ found in the LICENSE file.
 */
 
 import 'package:flutter/material.dart';
+import 'package:urlshortnerclient/services/service_locator.dart';
 import 'package:urlshortnerclient/views/homeScreen.dart';
+
 void main() {
+  setupServiceLocator();
   runApp(MyApp());
 }
 
@@ -19,7 +22,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        
         home: HomeScreen());
   }
 }

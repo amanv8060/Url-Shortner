@@ -15,7 +15,7 @@ class PageNotFound extends StatelessWidget {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return Scaffold(body: LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth > 480) {
+      if (constraints.maxWidth > 768) {
         return Stack(children: [
           Container(
               child: Lottie.asset('assets/animations/pageNotFoundDesktop.json',
