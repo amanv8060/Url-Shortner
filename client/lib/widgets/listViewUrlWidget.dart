@@ -6,7 +6,7 @@ found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
-import 'package:urlshortnerclient/views/urls/editUrlView.dart';
+import 'package:urlshortnerclient/views/urls/singleUrlScreen.dart';
 
 class ListViewUrlWidget extends StatelessWidget {
   final UrlModel url;
@@ -33,7 +33,7 @@ class ListViewUrlWidget extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => EditUrlScreen(urlModel: url)));
+                builder: (context) => SingleUrlScreen(full: full, url: url)));
       },
     );
   }
@@ -50,7 +50,7 @@ class ListViewUrlWidget extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EditUrlScreen(urlModel: url)));
+                  builder: (context) => SingleUrlScreen(full: full, url: url)));
         },
       ),
     );

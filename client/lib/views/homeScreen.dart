@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (context) => _sessionViewModel,
       child: Consumer<SessionViewModel>(
         builder: (context, model, child) {
-          return AllUrlsScreen();
           if (model.isError) {
             print(model.errorMessage);
           }
@@ -42,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return SplashScreen();
           } else {
             if (model.user != null) {
+              print(model.user!.token); 
               return AllUrlsScreen();
             } else {
               return AuthScreen();

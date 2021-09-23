@@ -5,11 +5,12 @@ import { UserModel } from "../models/userModel";
 import env from "../config";
 import { CallbackError } from "mongoose";
 
-
 const userSignin = async (req: Request, res: Response) => {
-  let user;
-
-  user = await UserModel.findOne({ email: req.body.email });
+  let user = await UserModel.findOne({ email: req.body.email });
+  // .populate(
+  //   "urls",
+  //   "-__v"
+  // );
 
   if (!user) {
     return res.status(404).send({ message: "Email Not found." });
@@ -20,12 +21,13 @@ const userSignin = async (req: Request, res: Response) => {
   }
 
   const token = jwt.sign({ id: user.id }, env.SECRET_KEY, {
-    expiresIn: 604800, // 7 Days (in sec)
+    expiresIn: 86400, // 1 day (in sec)
   });
 
   res.status(200).send({
     id: user._id,
     email: user.email,
+    name: user.name,
     token: token,
   });
 };
@@ -37,6 +39,10 @@ const createUser = async (req: Request, res: Response) => {
   if (req.body.password === undefined) {
     return res.status(400).send({ message: "Password is required" });
   }
+
+  if (req.body.name === undefined) {
+    return res.status(400).send({ message: "Name is required" });
+  }
   const hash = await argon2.hash(req.body.password, {
     type: argon2.argon2id,
   });
@@ -44,6 +50,8 @@ const createUser = async (req: Request, res: Response) => {
   const user = new UserModel({
     email: req.body.email,
     password: hash,
+    name: req.body.name,
+    urls: [],
   });
 
   user.save((err: CallbackError, user: any) => {
@@ -54,5 +62,8 @@ const createUser = async (req: Request, res: Response) => {
     }
   });
 };
+const tokenVerify = async (req: Request, res: Response) => {
+  res.status(200).send({ message: "Token Verified" });
+};
 
-export default { userSignin, createUser };
+export default { userSignin, createUser , tokenVerify};

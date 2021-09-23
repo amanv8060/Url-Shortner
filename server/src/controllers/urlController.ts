@@ -1,12 +1,22 @@
 import { URLModel } from "../models/urlModel";
 
 import { Request, Response } from "express";
+import { UserModel } from "../models/userModel";
 
 const getAllURLS = async (req: Request, res: Response) => {
   let urls = await URLModel.find({});
-  res.status(200).json(urls);
+  res.status(200).send({ urls: urls });
 };
 
+const getUserUrls = async (req: Request, res: Response) => {
+  let urls = await UserModel.findById(req.body.docId, "urls").populate(
+    "urls"
+  );
+  if (!urls) {
+    return res.status(404).json({ message: "Failed to fetch urls" });
+  }
+  return res.status(200).json( urls );
+};
 const createUrl = async (req: Request, res: Response) => {
   if (req.body.shortUrl === undefined) {
     return res.status(400).json({ message: "Please provide a short url" });
@@ -18,16 +28,28 @@ const createUrl = async (req: Request, res: Response) => {
   if (exists) {
     return res.status(400).json({ message: "Short url already exists" });
   }
+  const user = await UserModel.findOne({ _id: req.body.docId });
+  if (!user) {
+    return res.status(400).json({ message: "User not found" });
+  }
   const url = new URLModel({
     shortUrl: req.body.shortUrl,
     longUrl: req.body.longUrl,
   });
 
-  url.save((err, url) => {
+  url.save(async (err, newurl) => {
     if (err) {
       res.status(500).json({ message: "Internal Server Error" });
     }
-    res.status(200).json(url);
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: req.body.docId },
+      { $push: { urls: [url._id] } }
+    );
+    if (!updatedUser) {
+      await URLModel.findByIdAndRemove(url._id);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+    return res.status(200).json(newurl);
   });
 };
 
@@ -43,6 +65,7 @@ const editUrl = async (req: Request, res: Response) => {
     {
       longUrl: req.body.longUrl,
     },
+    //return the updated url
     { new: true }
   )
     .then((url) => {
@@ -71,6 +94,10 @@ const deleteUrl = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Please provide a id" });
   }
 
+  const user = await UserModel.findOneAndUpdate(
+    { _id: req.body.docId },
+    { $pull: { cars: req.query.cId } }
+  );
   await URLModel.findByIdAndRemove(req.body.id)
     .then((url) => {
       return res.status(200).json(url);
@@ -79,4 +106,11 @@ const deleteUrl = async (req: Request, res: Response) => {
       return res.status(500).send({ message: err });
     });
 };
-export default { createUrl, getAllURLS, editUrl, redirect, deleteUrl };
+export default {
+  createUrl,
+  getAllURLS,
+  editUrl,
+  redirect,
+  deleteUrl,
+  getUserUrls,
+};

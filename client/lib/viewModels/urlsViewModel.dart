@@ -8,9 +8,13 @@ import 'package:flutter/foundation.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
 import 'package:urlshortnerclient/services/urlService.dart';
+import 'package:urlshortnerclient/viewModels/sessionViewModel.dart';
 
 class UrlsViewModel extends ChangeNotifier {
   final UrlService _urlService = serviceLocator<UrlService>();
+
+  final SessionViewModel _sessionViewModel = serviceLocator<SessionViewModel>();
+
   List<UrlModel> _urls = [];
 
   bool _processing = false;
@@ -31,7 +35,7 @@ class UrlsViewModel extends ChangeNotifier {
     _isError = false;
     notifyListeners();
     try {
-      _urls = await _urlService.getAllUrls();
+      _urls = await _urlService.getAllUrls(_sessionViewModel.user!.token);
     } catch (error) {
       _isError = true;
       _errorMessage = error.toString();

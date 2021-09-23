@@ -9,11 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:urlshortnerclient/models/urlModel.dart';
 import 'package:urlshortnerclient/services/baseService.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
-import 'package:urlshortnerclient/services/urlService.dart';
 import 'package:urlshortnerclient/utils/scalingQuery.dart';
-import 'package:urlshortnerclient/viewModels/sessionViewModel.dart';
 import 'package:urlshortnerclient/viewModels/urlViewModel.dart';
-import 'package:urlshortnerclient/views/homeScreen.dart';
+import 'package:urlshortnerclient/views/urls/allUrlsView.dart';
 import 'package:urlshortnerclient/views/urls/createUrlView.dart';
 
 class EditUrlScreen extends StatefulWidget {
@@ -237,7 +235,7 @@ class _EditUrlScreenState extends State<EditUrlScreen> {
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomeScreen()),
+                                    builder: (context) => AllUrlsScreen()),
                                 (route) => false);
                           });
                         },

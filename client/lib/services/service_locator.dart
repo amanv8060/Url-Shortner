@@ -19,8 +19,8 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
 
 
+  serviceLocator.registerFactory<SessionViewModel>(() => SessionViewModel());
   serviceLocator.registerFactory<UrlViewModel>(() => UrlViewModel());
   serviceLocator.registerFactory<UrlsViewModel>(() => UrlsViewModel());
   serviceLocator.registerFactory<AuthViewModel>(() => AuthViewModel());
-  serviceLocator.registerFactory<SessionViewModel>(() => SessionViewModel());
 }

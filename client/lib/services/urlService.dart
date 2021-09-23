@@ -11,10 +11,11 @@ import 'package:urlshortnerclient/models/urlModel.dart';
 import 'package:urlshortnerclient/services/baseService.dart';
 
 class UrlService extends BaseService {
-  Future<List<UrlModel>> getAllUrls() async {
+  Future<List<UrlModel>> getAllUrls(String token) async {
     http.Response response;
     try {
-      response = await super.makeRequest('/api/v1/all', method: 'GET');
+      response = await super.makeRequest('/api/v1/getUserUrls',
+          method: 'GET', extraHeaders: {"authorization": token});
     } catch (er) {
       throw er;
     }

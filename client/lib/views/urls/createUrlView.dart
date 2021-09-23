@@ -8,11 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urlshortnerclient/services/baseService.dart';
 import 'package:urlshortnerclient/services/service_locator.dart';
-import 'package:urlshortnerclient/services/urlService.dart';
 import 'package:urlshortnerclient/utils/scalingQuery.dart';
-import 'package:urlshortnerclient/viewModels/sessionViewModel.dart';
 import 'package:urlshortnerclient/viewModels/urlViewModel.dart';
 import 'package:urlshortnerclient/views/homeScreen.dart';
+import 'package:urlshortnerclient/views/urls/allUrlsView.dart';
 
 class CreateUrlScreen extends StatefulWidget {
   CreateUrlScreen({Key? key}) : super(key: key);
@@ -224,7 +223,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomeScreen()),
+                                    builder: (context) => AllUrlsScreen()),
                                 (route) => false);
                           });
                         },

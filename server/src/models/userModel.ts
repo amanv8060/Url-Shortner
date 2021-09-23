@@ -5,6 +5,8 @@ const Schema = mongoose.Schema;
 interface User {
   email: string;
   password: string;
+  name: string;
+  urls: [];
 }
 
 let userSchema = new Schema<User>(
@@ -22,6 +24,15 @@ let userSchema = new Schema<User>(
       type: String,
       required: true,
     },
+    name: {
+      type: String,
+    },
+    urls: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "URL",
+      },
+    ],
   },
   { collection: "USERS" }
 );
