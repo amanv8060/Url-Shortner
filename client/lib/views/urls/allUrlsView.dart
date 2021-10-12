@@ -55,7 +55,7 @@ class _AllUrlsScreenState extends State<AllUrlsScreen> {
                       },
                       child: Text(
                         "Log Out  ",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.gray),
                       ))
                 ],
               ),
