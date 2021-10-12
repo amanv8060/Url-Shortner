@@ -191,7 +191,7 @@ class _CreateUrlScreenState extends State<CreateUrlScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Shorten the URL",
+                    "Shortened the URL",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize:
