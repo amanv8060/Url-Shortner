@@ -95,7 +95,7 @@ class _SingleUrlScreenState extends State<SingleUrlScreen> {
                           Theme.of(context).textTheme.headline6!.fontSize))),
         ),
         SizedBox(
-          height: 100,
+          height: 120,
         ),
         Center(
           child: ElevatedButton(
