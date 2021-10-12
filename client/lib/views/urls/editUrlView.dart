@@ -56,7 +56,7 @@ class _EditUrlScreenState extends State<EditUrlScreen> {
         create: (context) => _urlViewModel,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Shorten Url"),
+            title: Text("Edit Your Url"),
           ),
           body: IndexedStack(
             index: _isVisible,
