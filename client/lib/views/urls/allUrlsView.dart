@@ -98,7 +98,7 @@ class _AllUrlsScreenState extends State<AllUrlsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("You have no urls"),
+              Text("No Urls Found"),
               SizedBox(height: 10),
               TextButton(
                   onPressed: () {
@@ -107,7 +107,7 @@ class _AllUrlsScreenState extends State<AllUrlsScreen> {
                         MaterialPageRoute(
                             builder: (context) => CreateUrlScreen()));
                   },
-                  child: Text("Create one now"))
+                  child: Text("Create a new one now"))
             ],
           ),
         );
